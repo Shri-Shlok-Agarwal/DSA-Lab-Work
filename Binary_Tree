@@ -1,0 +1,197 @@
+//program for different operation of binary  and binary search tree
+
+#include<conio.h>
+#include<stdio.h>
+struct node
+{
+  int data;
+  struct node *lchild;
+  struct node *rchild;
+};
+void inorder(struct node *p);
+void preorder(struct node *p);
+void postorder(struct node *p);
+struct node *insert(struct node *p,int item);
+void search(struct node *p,int item);
+struct node *insert_binarytree(struct node *p,int item);
+
+
+void main()
+{
+struct node *root=NULL;
+int ch,num,flag;
+char choice;
+clrscr();
+do{
+printf("\n 1- insert");
+printf("\n 2- search");
+printf("\n 3- Inorder");
+printf("\n 4- preorder");
+printf("\n 5- postorder");
+
+printf("\n 6- insert in binary tree");
+
+
+printf("\n enter any choice");
+scanf("\n %d",&ch);
+
+
+switch(ch)
+{
+  case 1:
+	 printf("\n enter a value");
+	 scanf("%d",&num);
+	 root=insert(root,num);
+	 break;
+  case 2:
+	printf("\n enter a value to search");
+	scanf("%d",&num);
+	search(root,num);
+	break;
+  case 3:
+	inorder(root);
+	break;
+  case 4:
+	preorder(root);
+	break;
+  case 5:
+	postorder(root);
+	break;
+  case 6:
+	printf("\n enter a value");
+	 scanf("%d",&num);
+	root=insert_binarytree(root,num);
+	break;
+  default:
+	printf("\n incorrect choice");
+}
+printf("\n Do you wish to cotinue. ..");
+fflush(stdin);
+scanf("\n %c",&choice);
+
+}while(choice=='Y'||choice=='y');
+getch();
+}
+
+void inorder(struct node *p)
+{
+  if(p!=NULL)
+  {
+     inorder(p->lchild);
+     printf("%d\n",p->data);
+     inorder(p->rchild);
+   }
+}
+
+void preorder(struct node *p)
+{
+  if(p!=NULL)
+  {
+     printf("%d\n",p->data);
+     preorder(p->lchild);
+     preorder(p->rchild);
+   }
+}
+
+void postorder(struct node *p)
+{
+  if(p!=NULL)
+  {
+     postorder(p->lchild);
+     postorder(p->rchild);
+     printf("%d\n",p->data);
+   }
+}
+
+//insertion in binary search tree
+struct node *insert(struct node *p,int item)  
+{
+  if(p==NULL)
+  {
+    p=(struct node*)malloc(sizeof(struct node));
+    p->data=item;
+    p->lchild=p->rchild=NULL;
+  }
+  else if(item<p->data)
+	p->lchild=insert(p->lchild,item);
+  else if(item>p->data)
+	p->rchild=insert(p->rchild,item);
+  else
+	printf("\n duplicate value");
+  return(p);
+ }
+
+//deletion in binary search tree
+int del(struct node *p,int item)
+{
+ struct node *ptr;
+ if(p==NULL)
+ {
+    return(0);
+ }
+ else if(item<p->data)
+	return(del(p->lchild,item));
+      else if(item>p->data)
+	 return(del(p->rchild,item));
+      else{
+		if(p->lchild==NULL)
+		{
+			ptr=p;
+			p=p->rchild;
+			free(ptr);
+			return(1);
+		}
+		else if(p->rchild==NULL)
+		{
+			ptr=p;
+			p=p->lchild;
+			free(ptr);
+			return(1);
+		}
+		else
+		{
+		  ptr=p->lchild;
+		  while(ptr->rchild!=NULL)
+			ptr=ptr->rchild;
+		  p->data=ptr->data;
+		  return(del(p->lchild,ptr->data));
+		}
+
+	}
+}
+
+//search operation in binary search tree
+void search(struct node *p,int item)
+{
+  if(p==NULL)
+  {
+  printf("\n element not present in the tree");
+  return;
+  }
+  else if(item==p->data)
+       printf("\n %d is present in the tree",item);
+    else if(item<p->data)
+      search(p->lchild,item);
+    else
+      search(p->rchild,item);
+
+}
+
+//insert operation in binary tree
+struct node *insert_binarytree(struct node *p,int item)
+{
+   int count=1;
+  if(p==NULL)
+  {
+    p=(struct node*)malloc(sizeof(struct node));
+    p->data=item;
+    p->lchild=p->rchild=NULL;
+    count++;
+
+  }
+  else if(count%2==0)
+	p->lchild=insert(p->lchild,item);
+  else 	p->rchild=insert(p->rchild,item);
+
+  return(p);
+ }
